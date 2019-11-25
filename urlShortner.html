@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta chrset="UTF 8">
+    
+</head>
+
+<body  ng-app="sampleApp">
+<script src="https://code.angularjs.org/1.6.9/angular-route.js"></script>
+<script src="https://code.angularjs.org/1.6.9/angular.min.js"></script>
+<script src="https://code.angularjs.org/1.6.9/angular.js"></script>
+<script src="/lib/bootstrap.js"></script>
+<script src="/lib/bootstrap.css"></script>
+
+<div ng-controller="urlListController">
+
+    <form ng-submit="saveData()" >
+        &nbsp;&nbsp;&nbsp;
+        Email ID:
+        <input type="email"  ng-app="sampleApp" ng-model="emailId">&nbsp;
+	<input type="button" value="Fetch URLs" ng-click="fetchData(emailId)"/><br><br>&nbsp;&nbsp;&nbsp;
+        URL:
+        <input type="url"  ng-app="sampleApp" ng-model="url"><br><br>&nbsp;&nbsp;&nbsp;
+        Description:
+        <input type="text"  ng-app="sampleApp" ng-model="desc"><br><br>&nbsp;&nbsp;&nbsp;
+
+        <input type="submit" value="Submit" />
+        
+        
+        <ul ng-repeat="shortUrlList in shortenedUrlList" ng-hide="showListByEmail">
+            <li>{{shortUrlList}}&nbsp;&nbsp;<input type="button" value="Copy" ng-click="copyData(shortUrlList)"></li>
+        </ul>
+        
+        <ul ng-repeat="shortURL in shortUrlListByEmail" ng-show="showListByEmail">
+            <li>{{shortURL}}</li>
+        </ul>
+    </form>
+    
+</div>
+
+<script>
+   var sampleApp = angular.module("sampleApp",[]);
+
+    sampleApp.controller("urlListController",function($scope) {
+    	$scope.showListByEmail = false;
+        $scope.shortenedUrlList=[];
+        $scope.shortUrlListByEmail=[];
+        $scope.saveData = function () {
+        	$scope.url=$scope.url.substring(0,30) + "/" + $scope.emailId.substring(0, $scope.emailId.lastIndexOf		
+
+("@"));
+            	$scope.shortenedUrlList.push($scope.url);
+            	$scope.url="";
+            	$scope.emailId="";
+        }
+        
+        $scope.copyData = function(shortUrlList){
+        	alert("Select and Copy : " +shortUrlList);
+       }
+       
+       $scope.fetchData = function(emailId) {
+       		$scope.showListByEmail = true;
+       		for(var i=0;i<($scope.shortenedUrlList.length);i++){
+           		if($scope.shortenedUrlList[i].includes(emailId.substring(0, 				           
+
+			emailId.lastIndexOf("@")))){
+         			$scope.shortUrlListByEmail.push($scope.shortenedUrlList[i]);
+         		}
+       		}
+                		
+       }
+        
+                
+    });
+</script>
+</body>
+</html>
